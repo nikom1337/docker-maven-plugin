@@ -33,6 +33,8 @@ import org.eclipse.jgit.storage.file.FileRepositoryBuilder;
 
 import java.io.IOException;
 
+import static com.google.common.base.Strings.isNullOrEmpty;
+
 public class Git {
 
   private final Repository repo;
@@ -68,6 +70,10 @@ public class Git {
     try {
       // get the first 7 characters of the latest commit
       final ObjectId head = repo.resolve("HEAD");
+      if (head == null || isNullOrEmpty(head.getName())) {
+        return null;
+      }
+
       result.append(head.getName().substring(0, 7));
       final org.eclipse.jgit.api.Git git = new org.eclipse.jgit.api.Git(repo);
 
